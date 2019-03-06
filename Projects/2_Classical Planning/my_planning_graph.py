@@ -200,8 +200,8 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic with A*
         """
         costs = []
-        self.fill()
         for goal in self.goal:
+            self._extend()
             costs.append(self.h_levelcost(goal))
         return max(costs)
 
