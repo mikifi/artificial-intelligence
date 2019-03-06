@@ -26,10 +26,6 @@ class ActionLayer(BaseActionLayer):
             if ~effectB in self.children[actionA]:
                 return True
 
-        # for effectB in actionB.effects:
-        #    if effectA == ~effectB or effectB == ~effectA:
-        #        return True
-
         return False
 
     def _interference(self, actionA, actionB):
@@ -64,7 +60,8 @@ class ActionLayer(BaseActionLayer):
         """
         for preconditionA in actionA.preconditions:
             for preconditionB in actionB.preconditions:
-                if self.parent_layer.is_mutex(preconditionA, preconditionB) and self.parent_layer.is_mutex(preconditionB, preconditionA):
+                if self.parent_layer.is_mutex(preconditionA, preconditionB) \
+                        and self.parent_layer.is_mutex(preconditionB, preconditionA):
                     return True
         return False
 
