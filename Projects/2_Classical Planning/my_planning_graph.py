@@ -155,8 +155,12 @@ class PlanningGraph:
         --------
         Russell-Norvig 10.3.1 (3rd Edition)
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        costs = []
+        self.fill()
+        for goal in self.goal:
+            costs.append(self.h_levelcost(goal))
+
+        return sum(costs)
 
     def h_levelcost(self, goal):
         """
