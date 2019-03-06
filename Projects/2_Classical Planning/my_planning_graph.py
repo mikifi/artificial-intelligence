@@ -46,6 +46,8 @@ class ActionLayer(BaseActionLayer):
             if ~effectB in self.parents[actionA]:
                 return True
 
+        return False
+
     def _competing_needs(self, actionA, actionB):
         """ Return True if any preconditions of the two actions are pairwise mutex in the parent layer
 
