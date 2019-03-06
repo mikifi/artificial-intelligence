@@ -19,9 +19,18 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        for effectA in actionA.effects:
+            if ~effectA in self.children[actionB]:
+                return True
+        for effectB in actionB.effects:
+            if ~effectB in self.children[actionA]:
+                return True
 
+        # for effectB in actionB.effects:
+        #    if effectA == ~effectB or effectB == ~effectA:
+        #        return True
+
+        return False
 
     def _interference(self, actionA, actionB):
         """ Return True if the effects of either action negate the preconditions of the other 
@@ -34,8 +43,12 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        for effectA in actionA.effects:
+            if ~effectA in self.parents[actionB]:
+                return True
+        for effectB in actionB.effects:
+            if ~effectB in self.parents[actionA]:
+                return True
 
     def _competing_needs(self, actionA, actionB):
         """ Return True if any preconditions of the two actions are pairwise mutex in the parent layer
@@ -49,8 +62,11 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         layers.BaseLayer.parent_layer
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        for preconditionA in actionA.preconditions:
+            for preconditionB in actionB.preconditions:
+                if self.parent_layer.is_mutex(preconditionA, preconditionB) and self.parent_layer.is_mutex(preconditionB, preconditionA):
+                    return True
+        return False
 
 
 class LiteralLayer(BaseLiteralLayer):
@@ -66,13 +82,20 @@ class LiteralLayer(BaseLiteralLayer):
         --------
         layers.BaseLayer.parent_layer
         """
-        # TODO: implement this function
-        raise NotImplementedError
+        parent_list = self.parents[literalA] | self.parents[literalB]
+
+        for parentA in parent_list:
+            for parentB in parent_list:
+                if parentA != parentB \
+                        and not (self.parent_layer.is_mutex(parentA, parentB)
+                                 or self.parent_layer.is_mutex(parentB, parentA)):
+                    return False
+
+        return True
 
     def _negation(self, literalA, literalB):
         """ Return True if two literals are negations of each other """
-        # TODO: implement this function
-        raise NotImplementedError
+        return literalA == ~literalB
 
 
 class PlanningGraph:
