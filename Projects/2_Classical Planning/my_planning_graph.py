@@ -158,6 +158,20 @@ class PlanningGraph:
         # TODO: implement this function
         raise NotImplementedError
 
+    def h_levelcost(self, goal):
+        """
+        The level cost is a helper function used by MaxLevel and LevelSum.
+        he level cost of a goal is equal to the level number of the first literal layer in the planning graph where
+        the goal literal appears.
+        :param goal:
+        :return:
+        """
+        for i, layer in enumerate(self.literal_layers):
+            if goal in list(layer):
+                return i
+
+        return len(self.literal_layers)
+
     def h_maxlevel(self):
         """ Calculate the max level heuristic for the planning graph
 
@@ -185,8 +199,11 @@ class PlanningGraph:
         -----
         WARNING: you should expect long runtimes using this heuristic with A*
         """
-        # TODO: implement maxlevel heuristic
-        raise NotImplementedError
+        costs = []
+        self.fill()
+        for goal in self.goal:
+            costs.append(self.h_levelcost(goal))
+        return max(costs)
 
     def h_setlevel(self):
         """ Calculate the set level heuristic for the planning graph
