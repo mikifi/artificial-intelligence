@@ -156,8 +156,8 @@ class PlanningGraph:
         Russell-Norvig 10.3.1 (3rd Edition)
         """
         costs = []
-        self.fill()
         for goal in self.goal:
+            self._extend()
             costs.append(self.h_levelcost(goal))
 
         return sum(costs)
