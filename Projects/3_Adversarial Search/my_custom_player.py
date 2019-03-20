@@ -36,7 +36,10 @@ class CustomPlayer(DataPlayer):
         # Select a move from opening book as player 1 or 2 for the first plies, otherwise
         # return the optimal minimax move using iterative deepening
         if state.ply_count < 2:
-            self.queue.put(random.choice(state.actions()))
+            if state in self.data.keys():
+                self.queue.put(self.data[state])
+            else:
+                self.queue.put(random.choice(state.actions()))
         else:
             for depth in range(1, max_depth + 1):
                 self.queue.put(self.minimax(state, depth=depth))
